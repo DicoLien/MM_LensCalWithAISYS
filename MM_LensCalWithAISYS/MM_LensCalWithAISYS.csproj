@@ -74,305 +74,48 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AxAltairDrv">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxAltairDrv.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxAltairDrvAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxAltairDrvAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxAltairDSDrv">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxAltairDSDrv.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxAltairDSDrvAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxAltairDSDrvAsm4.dll</HintPath>
-    </Reference>
     <Reference Include="AxAltairUDrv">
       <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxAltairUDrv.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
-    <Reference Include="AxAltairUDrvAsm4">
+    <Reference Include="AxAltairUDrvAsm4, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxAltairUDrvAsm4.dll</HintPath>
     </Reference>
-    <Reference Include="AxAltairUVisionFrameworkCtrl">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxAltairUVisionFrameworkCtrl.dll</HintPath>
+    <Reference Include="AxMMLENSCALLib">
+      <HintPath>..\MM_SDK\AxMMLENSCALLib.dll</HintPath>
+    </Reference>
+    <Reference Include="AxMMMARKLib">
+      <HintPath>..\MM_SDK\AxMMMARKLib.dll</HintPath>
+    </Reference>
+    <Reference Include="AxMMMOTIONLib">
+      <HintPath>..\MM_SDK\AxMMMOTIONLib.dll</HintPath>
+    </Reference>
+    <Reference Include="AxOvkBase, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxAltairUVisionFrameworkCtrlAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxAltairUVisionFrameworkCtrlAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxAltairVisionFrameworkCtrl">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxAltairVisionFrameworkCtrl.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxAltairVisionFrameworkCtrlAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxAltairVisionFrameworkCtrlAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxAudioWaveformMatcherCtrl">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxAudioWaveformMatcherCtrl.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxAudioWaveformMatcherCtrlAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxAudioWaveformMatcherCtrlAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxChessReaderFrameworkCtrl">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxChessReaderFrameworkCtrl.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxChessReaderFrameworkCtrlAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxChessReaderFrameworkCtrlAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxChessReaderFrameworkCtrlUAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxChessReaderFrameworkCtrlUAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxChessReaderFrameworkUCtrl">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxChessReaderFrameworkUCtrl.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxCommCtrl">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxCommCtrl.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxCommCtrlAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxCommCtrlAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxCruxUDrv">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxCruxUDrv.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxCruxUDrvAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxCruxUDrvAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxDiceReaderFrameworkCtrl">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxDiceReaderFrameworkCtrl.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxDiceReaderFrameworkCtrlAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxDiceReaderFrameworkCtrlAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxDiceReaderFrameworkCtrlUAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxDiceReaderFrameworkCtrlUAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxDiceReaderFrameworkUCtrl">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxDiceReaderFrameworkUCtrl.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxGammaGeneratorCtrl">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxGammaGeneratorCtrl.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxGammaGeneratorCtrlAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxGammaGeneratorCtrlAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxLyraUDrv">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxLyraUDrv.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxLyraUDrvAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxLyraUDrvAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxMahJongReaderFrameworkCtrl">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxMahJongReaderFrameworkCtrl.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxMahJongReaderFrameworkCtrlAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxMahJongReaderFrameworkCtrlAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxMahJongReaderFrameworkCtrlUAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxMahJongReaderFrameworkCtrlUAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxMahJongReaderFrameworkUCtrl">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxMahJongReaderFrameworkUCtrl.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxMizarCtrl">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxMizarCtrl.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxMizarCtrlAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxMizarCtrlAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxOvkAdapter">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkAdapter.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxOvkAdapterAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkAdapterAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxOvkBarcodeTools">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkBarcodeTools.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxOvkBarcodeToolsAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkBarcodeToolsAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxOvkBase">
       <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkBase.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
-    <Reference Include="AxOvkBaseAsm4">
+    <Reference Include="AxOvkBaseAsm4, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkBaseAsm4.dll</HintPath>
+    </Reference>
+    <Reference Include="AxOvkMsr, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxOvkBlob">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkBlob.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxOvkBlobAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkBlobAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxOvkColor">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkColor.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxOvkColorAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkColorAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxOvkGameTools">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkGameTools.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxOvkGameToolsAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkGameToolsAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxOvkGauge">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkGauge.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxOvkGaugeAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkGaugeAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxOvkGeometry">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkGeometry.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxOvkGeometryAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkGeometryAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxOvkImage">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkImage.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxOvkImageAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkImageAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxOvkIO">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkIO.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxOvkIOAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkIOAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxOvkMarkInsp">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkMarkInsp.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxOvkMarkInsp2">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkMarkInsp2.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxOvkMarkInsp2Asm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkMarkInsp2Asm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxOvkMarkInspAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkMarkInspAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxOvkModbus">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkModbus.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxOvkModbusAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkModbusAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxOvkMsr">
       <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkMsr.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
-    <Reference Include="AxOvkMsrAsm4">
+    <Reference Include="AxOvkMsrAsm4, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkMsrAsm4.dll</HintPath>
     </Reference>
     <Reference Include="AxOvkPat">
       <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkPat.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
-    <Reference Include="AxOvkPatAsm4">
+    <Reference Include="AxOvkPatAsm4, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkPatAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxOvkTexture">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkTexture.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxOvkTextureAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkTextureAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxPokerReaderFrameworkCtrl">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxPokerReaderFrameworkCtrl.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxPokerReaderFrameworkCtrlAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxPokerReaderFrameworkCtrlAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxPokerReaderFrameworkCtrlUAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxPokerReaderFrameworkCtrlUAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxPokerReaderFrameworkUCtrl">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxPokerReaderFrameworkUCtrl.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxPokerReaderLiteFrameworkUCtrl">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxPokerReaderLiteFrameworkUCtrl.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxPokerReaderLiteFrameworkUCtrlAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxPokerReaderLiteFrameworkUCtrlAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxVAlignCtrl">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxVAlignCtrl.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxVAlignCtrlAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxVAlignCtrlAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxVAlignTools">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxVAlignTools.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxVAlignToolsAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxVAlignToolsAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxVAlignUCtrl">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxVAlignUCtrl.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxVAlignUCtrlAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxVAlignUCtrlAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxVecMatchCtrl">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxVecMatchCtrl.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxVecMatchCtrlAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxVecMatchCtrlAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxWavFileRecorderCtrl">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxWavFileRecorderCtrl.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxWavFileRecorderCtrlAsm4">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxWavFileRecorderCtrlAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="MMLENSCALLib">
-      <HintPath>.\MMLENSCALLib.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="MMMARKLib">
-      <HintPath>.\MMMARKLib.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="MMMOTIONLib">
-      <HintPath>.\MMMOTIONLib.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
     <Reference Include="System" />
@@ -397,9 +140,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AxMMLENSCALLib.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="CalTable.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -408,12 +148,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AxMMMARKLib.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="AxMMMOTIONLib.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

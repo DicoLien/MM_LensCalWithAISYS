@@ -327,7 +327,7 @@
                         </GroupBox>
                         <GroupBox Header="校正座標" Grid.Row="1" Grid.RowSpan="2">
                             <WindowsFormsHost>
-                                <winfrom:DataGridView x:Name="CalGridView"/>
+                                <!--<winfrom:DataGridView x:Name="CalGridView"/>-->
                             </WindowsFormsHost>
                         </GroupBox>
                     </Grid>

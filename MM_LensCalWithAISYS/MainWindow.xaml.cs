@@ -20,9 +20,13 @@ using AxMMMOTIONLib;
 using AxMMLENSCALLib;
 using AxAxAltairUDrv;
 
+using AxOvkBase;
 using AxAxOvkBase;
 using AxAxOvkPat;
+
+using AxOvkMsr;
 using AxAxOvkMsr;
+
 using System.Timers;
 
 namespace MM_LensCalWithAISYS
@@ -54,9 +58,9 @@ namespace MM_LensCalWithAISYS
         AxAxCircleMsr axAxCircleMsr1 = new AxAxCircleMsr();
        
         int g_nActiveSurfaceHandle;
-        AxOvkBase.TxAxHitHandle nLockHandle = new AxOvkBase.TxAxHitHandle();
-
-        AxOvkMsr.TxAxCircleMsrDragHandle cnLockHandle = new AxOvkMsr.TxAxCircleMsrDragHandle();
+        TxAxHitHandle nLockHandle = new TxAxHitHandle();
+       
+        TxAxCircleMsrDragHandle cnLockHandle = new TxAxCircleMsrDragHandle();
 
         private double dX = -1, dY = -1, dZ = -1, dR = -1; //For axMMMotion1.GetCurPostion
         private double eX = -1, eY = -1, eZ = -1, eR = -1; //For AxMotion.GetCurPostint(Encoder)
@@ -78,8 +82,8 @@ namespace MM_LensCalWithAISYS
         {
             InitializeComponent();
 
-            //InitAisys();
-            InitWFH();
+            InitAisys();
+            //InitWFH();
             //InitLensCal();
             //InitMotion();
 
