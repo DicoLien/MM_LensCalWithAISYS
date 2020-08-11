@@ -29,6 +29,9 @@ using AxAxOvkMsr;
 
 using System.Timers;
 
+using MM_Motion;
+using System.IO;
+
 namespace MM_LensCalWithAISYS
 {
     /// <summary>
@@ -36,42 +39,46 @@ namespace MM_LensCalWithAISYS
     /// </summary>
     public partial class MainWindow : Window
     {
+        //
+        //MarkingMate OCX
+        //
         AxMMMark axMark = new AxMMMark();
         AxMMMotion axMotion = new AxMMMotion();
         AxMMLensCal axLensCal = new AxMMLensCal();
 
         System.Timers.Timer MotionTimer = new System.Timers.Timer();
-        
+        private double dX = -1, dY = -1, dZ = -1, dR = -1; //For axMMMotion1.GetCurPostion
+        private double eX = -1, eY = -1, eZ = -1, eR = -1; //For AxMotion.GetCurPostint(Encoder)
 
-
+        //
+        // AI Sys
+        //
         AxAxAltairU m_AxAxAltairU_UI = new AxAxAltairU();
-
         AxAxCanvas axAxCanvas1 = new AxAxCanvas();
         AxAxCanvas axAxCanvas2 = new AxAxCanvas();
-
         AxAxROIBW8 axAxROIBW81 = new AxAxROIBW8();
         AxAxROIBW8 axAxROIBW82 = new AxAxROIBW8();
-
-
         AxAxMatch axAxMatch1 = new AxAxMatch();
-
         AxAxCircleMsr axAxCircleMsr1 = new AxAxCircleMsr();
        
         int g_nActiveSurfaceHandle;
-        TxAxHitHandle nLockHandle = new TxAxHitHandle();
-       
+        TxAxHitHandle nLockHandle = new TxAxHitHandle();       
         TxAxCircleMsrDragHandle cnLockHandle = new TxAxCircleMsrDragHandle();
 
-        private double dX = -1, dY = -1, dZ = -1, dR = -1; //For axMMMotion1.GetCurPostion
-        private double eX = -1, eY = -1, eZ = -1, eR = -1; //For AxMotion.GetCurPostint(Encoder)
-        float g_fZoomX, g_fZoomY, g_fZoomX2, g_fZoomY2, org_fZoomX, org_fZoomY;
-        bool g_Tech, g_SetArea, have_setarea, c_Det, have_learn, mm_startcal, initwfh;
         bool bLockROI1Flag, bLockROI2Flag, bCircleMsrFlag, AisysIsCreate;
-        int sa_X, sa_Y, sa_W, sa_H;
+        float g_fZoomX, g_fZoomY, g_fZoomX2, g_fZoomY2, org_fZoomX, org_fZoomY;
+
+        //
+        //common
+        //
+        string tempstr;
+        bool g_Tech, g_SetArea, have_setarea, c_Det, have_learn, mm_startcal, initwfh;
+        int sa_X, sa_Y, sa_W, sa_H, DT;
         float p_centerX, p_centerY, r_centerX, r_centerY, mm_x, mm_y;
         private FlowDocument doc = new FlowDocument();
         private delegate void UpdateSysMsgCallBack(System.Windows.Controls.RichTextBox ctl, string value, string color);
         private delegate void UpdateXYZCallBack(TextBlock ctl, string value);
+        float resX, resY;
 
         List<XYCal> CalList = new List<XYCal>();
 
@@ -83,9 +90,9 @@ namespace MM_LensCalWithAISYS
             InitializeComponent();
 
             InitAisys();
-            //InitWFH();
-            //InitLensCal();
-            //InitMotion();
+            InitMM();
+            InitLensCal();
+            InitMotion();
 
 
         }
@@ -122,13 +129,13 @@ namespace MM_LensCalWithAISYS
         {
 
                 axMotion.GetCurPosition(ref dX, ref dY, ref dZ, ref dR, 1);
-                UpdateXYZ(Xloc, dX.ToString("0.000"));
-                UpdateXYZ(Yloc, dY.ToString("0.000"));
-                UpdateXYZ(Zloc, dZ.ToString("0.000"));
+            UpdateXYStatus(Xloc, dX.ToString("0.000"));
+            UpdateXYStatus(Yloc, dY.ToString("0.000"));
+            UpdateXYStatus(Zloc, dZ.ToString("0.000"));
                 axMotion.GetCurPosition(ref eX, ref eY, ref eZ, ref eR, 2);
-                UpdateXYZ(Xenc, eX.ToString("0.000"));
-                UpdateXYZ(Yenc, eY.ToString("0.000"));
-                UpdateXYZ(Zenc, eZ.ToString("0.000"));
+            UpdateXYStatus(Xenc, eX.ToString("0.000"));
+            UpdateXYStatus(Yenc, eY.ToString("0.000"));
+            UpdateXYStatus(Zenc, eZ.ToString("0.000"));
 
         }
 
@@ -184,13 +191,36 @@ namespace MM_LensCalWithAISYS
                 var p = new Paragraph();
                 var r = new Run(value);
                 //p.LineHeight = 1;
-
                 p.Inlines.Add(r);
-
                 doc.Blocks.Add(p);
                 ctl.Document = doc;
             }
         }
+
+        private void UpdateXYStatus(TextBlock ctl, string value)
+        {
+            if(!Dispatcher.CheckAccess())
+            {
+                Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Normal, new Action<TextBlock, string>(UpdateXYZ), ctl, value);
+            }
+            else
+            {
+                UpdateXYZ(ctl, value);
+            }
+        }
+
+        private void UpdateSysMsgStatus()
+        {
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Normal, new Action<System.Windows.Controls.RichTextBox, string>(UpdateSysMsg), SysMsg, tempstr);
+            }
+            else
+            {
+                UpdateSysMsg(SysMsg, tempstr);
+            }
+        }
+
         private void InitMotion()
         {
             MotionTimer.Elapsed += MotionTimer_Tick;
@@ -199,7 +229,7 @@ namespace MM_LensCalWithAISYS
             MotionTimer.Start();
         }
 
-        private void InitWFH()
+        private void InitMM()
         {
             axMark.BeginInit();       
             wfh_axmark.Child = axMark;
@@ -234,10 +264,10 @@ namespace MM_LensCalWithAISYS
             wfh_canvas1.Child = axAxCanvas1;
             axAxCanvas1.EndInit();
 
-            axAxCanvas1.CanvasWidth = Convert.ToInt32(wfh_canvas1.Width);
-            axAxCanvas1.CanvasHeight = Convert.ToInt32(wfh_canvas1.Height);
-            axAxCanvas1.Width = Convert.ToInt32(wfh_canvas1.Width);
-            axAxCanvas1.Height = Convert.ToInt32(wfh_canvas1.Height);
+            //axAxCanvas1.CanvasWidth = Convert.ToInt32(wfh_canvas1.ActualWidth);
+            //axAxCanvas1.CanvasHeight = Convert.ToInt32(wfh_canvas1.ActualHeight);
+            //axAxCanvas1.Width = Convert.ToInt32(wfh_canvas1.ActualWidth);
+            //axAxCanvas1.Height = Convert.ToInt32(wfh_canvas1.ActualHeight);
 
             axAxCanvas1.OnCanvasMouseDown += new AxAxOvkBase.IAxCanvasEvents_OnCanvasMouseDownEventHandler(axAxCanvas1_OnCanvasMouseDown);
             axAxCanvas1.OnCanvasMouseMove += new AxAxOvkBase.IAxCanvasEvents_OnCanvasMouseMoveEventHandler(axAxCanvas1_OnCanvasMouseMove);
@@ -251,12 +281,6 @@ namespace MM_LensCalWithAISYS
             axAxCanvas2.BeginInit();
             wfh_canvas2.Child = axAxCanvas2;
             axAxCanvas2.EndInit();
-            axAxCanvas2.CanvasWidth = Convert.ToInt32(wfh_canvas2.Width);
-            axAxCanvas2.CanvasHeight = Convert.ToInt32(wfh_canvas2.Height);
-            axAxCanvas2.Width = Convert.ToInt32(wfh_canvas2.Width);
-            axAxCanvas2.Height = Convert.ToInt32(wfh_canvas2.Height);
-
-
 
             axAxROIBW81.BeginInit();
             wfh_roib81.Child = axAxROIBW81;
@@ -360,6 +384,37 @@ namespace MM_LensCalWithAISYS
             axMotion.JogBegin(2, 4096, 0);
         }
 
+        private void Wfh_canvas1_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            axAxCanvas1.CanvasWidth = Convert.ToInt32(wfh_canvas1.ActualWidth);
+            axAxCanvas1.CanvasHeight = Convert.ToInt32(wfh_canvas1.ActualHeight);
+            axAxCanvas1.Width = Convert.ToInt32(wfh_canvas1.ActualWidth);
+            axAxCanvas1.Height = Convert.ToInt32(wfh_canvas1.ActualHeight);
+        }
+
+        private void X_res_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            resX = float.Parse(X_res.Text);
+        }
+
+        private void Y_res_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            resY = float.Parse(Y_res.Text);
+        }
+
+        private void Wfh_canvas2_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            axAxCanvas2.CanvasWidth = Convert.ToInt32(wfh_canvas2.ActualWidth);
+            axAxCanvas2.CanvasHeight = Convert.ToInt32(wfh_canvas2.ActualHeight);
+            axAxCanvas2.Width = Convert.ToInt32(wfh_canvas2.ActualWidth);
+            axAxCanvas2.Height = Convert.ToInt32(wfh_canvas2.ActualHeight);
+        }
+
+        private void Mo_control_Click(object sender, RoutedEventArgs e)
+        {
+            axMark.XYTableConfig();
+        }
+
         private void Mo_XYright_btn_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
             axMotion.JogEnd(2);
@@ -400,12 +455,13 @@ namespace MM_LensCalWithAISYS
             axMotion.GetCurPosition(ref dX, ref dY, ref dZ, ref dR, 1);
             double endX = dX + Convert.ToDouble(X_dis.Text);
             double endY = dY + Convert.ToDouble(Y_dis.Text);
-            UpdateSysMsg(SysMsg, "Move To X:" + endX.ToString() + " Y:" + endY.ToString());
-            axMotion.MoveTo(Convert.ToDouble(X_dis.Text),
-                Convert.ToDouble(Y_dis.Text),
-                0,
-                0,
-                1);
+            UpdateSysMsg(SysMsg, "Move To X:" + dX.ToString() + " -> " + endX.ToString() + " Y:"+ dY.ToString() + " -> " + endY.ToString());
+            //axMotion.MoveTo(Convert.ToDouble(X_dis.Text),
+            //    Convert.ToDouble(Y_dis.Text),
+            //    0,
+            //    0,
+            //    1);
+            mmMoveTo(endX, endY);
             
         }
 
@@ -428,10 +484,13 @@ namespace MM_LensCalWithAISYS
 
         private void StartCal_Click(object sender, RoutedEventArgs e)
         {
-            mm_startcal = true;
-            Thread t1 = new Thread(new ThreadStart(DoStartCal));
-            //DoStartCal();
 
+            DT = Convert.ToInt32(float.Parse(delaytime.Text) * 1000);
+            mm_startcal = true;
+            
+            //ThreadPool.QueueUserWorkItem(DoStartCal);
+            //DoStartCal();
+            Thread t1 = new Thread(new ThreadStart(DoStartCal));
             t1.Start();
         }
 
@@ -440,35 +499,80 @@ namespace MM_LensCalWithAISYS
 
             axMotion.SetCurPosition(0, 0, 0, 0, 0);
             axMotion.SetCurPosition(0, 0, 0, 0, 1);
+            
             if (mm_startcal)
             {
                 double moveX, moveY;
-                for (int i = 1; i < mm_totalgridpoint; i++)
+
+                for (int i = 1; i < mm_totalgridpoint +1; i++)
                 {
+                    tempstr = "Start Calibration No." + i;
+                    //UpdateSysMsg(SysMsg, tempstr);
+                    UpdateSysMsgStatus();
                     moveX = axLensCal.GetCorrectPointX(i);
                     moveY = axLensCal.GetCorrectPointY(i);
-                    axMotion.MoveTo(moveX, moveY, 0, 0, 1);
+                    //axMotion.MoveTo(moveX, moveY, 0, 0, 1);
+                    tempstr = "Move To X:" + moveX + " Y:" + moveY + "..";
+                    UpdateSysMsgStatus();
+                    mmMoveTo(moveX, moveY);
+                    Thread.Sleep(DT);
                     StartMatch();
-                   while(mm_x > Convert.ToDouble(X_res.ToString()) &&
-                        mm_y > Convert.ToDouble(Y_res.ToString()))
+                   while(mm_x > resX && mm_y > resY)
                     {
-                        axMotion.MoveTo(mm_x, mm_y, 0, 0, 1);
+                        //axMotion.MoveTo(mm_x, mm_y, 0, 0, 1);
+                        tempstr = "Move To X:" + moveX + " Y:" + moveY + "..";
+                        UpdateSysMsgStatus();
+                        mmMoveTo1(mm_x, mm_y);
+                        Thread.Sleep(DT);
                         StartMatch();
                     }
+                    axMotion.GetCurPosition(ref dX, ref dY, ref dZ, ref dR, 0);
                     //Pxy.AddRange(new xylist[] { new xylist(0, 0, 0) });
-                    CalList.AddRange(new XYCal[] { new XYCal(i, mm_x, mm_y) });
+                    CalList.AddRange(new XYCal[] { new XYCal(i, dX, dY) });
                 }
             }
+            mm_startcal = false;
+            DoOutPut();
         }
+        private void mmMoveTo(double X, double Y)
+        {
 
+                axMotion.MoveTo(X, Y, 0, 0, 0);
+                for (; ; )
+                {
+                    if (axMotion.IsMotion(0) == 0)
+                    {
+                        tempstr = "Done.";
+                        UpdateSysMsgStatus();
+                        return;
+                    }
+
+                }
+
+        }
+        private void mmMoveTo1(double X, double Y)
+        {
+
+                axMotion.MoveTo(X, Y, 0, 0, 1);
+                for (; ; )
+                {
+                    if (axMotion.IsMotion(0) == 0)
+                    {
+                        tempstr = "Done.";
+                        UpdateSysMsgStatus();
+                        return;
+                    }
+
+                }
+        }
         private void DoOutPut()
         {
             System.Windows.Forms.TextBox result = new System.Windows.Forms.TextBox();
             int C_number = mm_totalgridpoint / 2;
             double cp_X = CalList[C_number].X;
             double cp_Y = CalList[C_number].Y;
-            int j = 0;
-            for(int i = 0; i < mm_totalgridpoint -1; i++)
+            //int j = 0;
+            for(int i = 0; i < mm_totalgridpoint ; i++)
             {
                 
                 double temp_X = CalList[i].X;
@@ -479,7 +583,10 @@ namespace MM_LensCalWithAISYS
                     result_X + " " +
                     result_Y + Environment.NewLine);
             }
-                    
+            StreamWriter write = new StreamWriter(Environment.CurrentDirectory + "\\XYCal.txt");
+            write.WriteLine(result.Text.ToString().TrimEnd());
+            write.Dispose();
+            System.Windows.MessageBox.Show("Calibration Finish.");
         }
 
         private void Mo_MoveXYZ_Click(object sender, RoutedEventArgs e)

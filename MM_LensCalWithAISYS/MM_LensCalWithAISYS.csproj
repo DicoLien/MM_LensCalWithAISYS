@@ -74,13 +74,22 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AxAltairUDrv">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxAltairUDrv.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxAltairUDrvAsm4, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="AxAltairUDrv, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxAltairUDrvAsm4.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxAltairUDrv.dll</HintPath>
+    </Reference>
+    <Reference Include="AxAxAltairUDrv">
+      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxAxAltairUDrv.dll</HintPath>
+    </Reference>
+    <Reference Include="AxAxOvkBase">
+      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxAxOvkBase.dll</HintPath>
+    </Reference>
+    <Reference Include="AxAxOvkMsr">
+      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxAxOvkMsr.dll</HintPath>
+    </Reference>
+    <Reference Include="AxAxOvkPat">
+      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxAxOvkPat.dll</HintPath>
     </Reference>
     <Reference Include="AxMMLENSCALLib">
       <HintPath>..\MM_SDK\AxMMLENSCALLib.dll</HintPath>
@@ -96,26 +105,15 @@
       <EmbedInteropTypes>False</EmbedInteropTypes>
       <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkBase.dll</HintPath>
     </Reference>
-    <Reference Include="AxOvkBaseAsm4, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkBaseAsm4.dll</HintPath>
-    </Reference>
     <Reference Include="AxOvkMsr, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>False</EmbedInteropTypes>
       <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkMsr.dll</HintPath>
     </Reference>
-    <Reference Include="AxOvkMsrAsm4, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="AxOvkPat, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkMsrAsm4.dll</HintPath>
-    </Reference>
-    <Reference Include="AxOvkPat">
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkPat.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AxOvkPatAsm4, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkPatAsm4.dll</HintPath>
+      <HintPath>..\AISYS .NET Framework 4.0 Assemblies\AxOvkPat.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
     <Reference Include="System" />
@@ -155,6 +153,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Motion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
