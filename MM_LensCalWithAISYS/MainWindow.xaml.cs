@@ -497,30 +497,42 @@ namespace MM_LensCalWithAISYS
         private void DoStartCal()
         {
 
-            axMotion.SetCurPosition(0, 0, 0, 0, 0);
-            axMotion.SetCurPosition(0, 0, 0, 0, 1);
-            
+            //axMotion.SetCurPosition(0, 0, 0, 0, 0);
+            //axMotion.SetCurPosition(0, 0, 0, 0, 1);
+            double baseX = dX, baseY = dY;
+            double moveX, moveY, CorX, CorY;
+
             if (mm_startcal)
             {
-                double moveX, moveY;
+                
 
                 for (int i = 1; i < mm_totalgridpoint +1; i++)
                 {
                     tempstr = "Start Calibration No." + i;
                     //UpdateSysMsg(SysMsg, tempstr);
                     UpdateSysMsgStatus();
-                    moveX = axLensCal.GetCorrectPointX(i);
-                    moveY = axLensCal.GetCorrectPointY(i);
+                    CorX = axLensCal.GetCorrectPointX(i);
+                    CorY = axLensCal.GetCorrectPointY(i);
+                    moveX = baseX + CorX;
+                    moveY = baseY + CorY;
                     //axMotion.MoveTo(moveX, moveY, 0, 0, 1);
-                    tempstr = "Move To X:" + moveX + " Y:" + moveY + "..";
+                    System.Windows.MessageBox.Show("BaseX:" + baseX
+                        + " BaseY:" + baseY
+                        + Environment.NewLine
+                        + " CorX:" + CorX
+                        + " CorY:" + CorY
+                        + Environment.NewLine
+                        + " moveX:" + moveX
+                        + " moveY:" + moveY);
+                    tempstr = "Move To X:" + moveY + " Y:" + moveX + "..";
                     UpdateSysMsgStatus();
-                    mmMoveTo(moveX, moveY);
+                    mmMoveTo(moveY, moveX);
                     Thread.Sleep(DT);
                     StartMatch();
                    while(mm_x > resX && mm_y > resY)
                     {
                         //axMotion.MoveTo(mm_x, mm_y, 0, 0, 1);
-                        tempstr = "Move To X:" + moveX + " Y:" + moveY + "..";
+                        tempstr = "Move To X:" + moveY + " Y:" + moveX + "..";
                         UpdateSysMsgStatus();
                         mmMoveTo1(mm_x, mm_y);
                         Thread.Sleep(DT);
@@ -528,7 +540,7 @@ namespace MM_LensCalWithAISYS
                     }
                     axMotion.GetCurPosition(ref dX, ref dY, ref dZ, ref dR, 0);
                     //Pxy.AddRange(new xylist[] { new xylist(0, 0, 0) });
-                    CalList.AddRange(new XYCal[] { new XYCal(i, dX, dY) });
+                    CalList.AddRange(new XYCal[] { new XYCal(i, dY, dX) });
                 }
             }
             mm_startcal = false;
