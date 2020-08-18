@@ -5,26 +5,28 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         
-        Title="MainWindow" Height="680" Width="1024" Loaded="Window_Loaded" Closing="Window_Closing" WindowStartupLocation="CenterScreen" >
+        Title="MainWindow" Height="700" Width="1024" Loaded="Window_Loaded" Closing="Window_Closing" WindowStartupLocation="CenterScreen" >
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition  />
-            <RowDefinition Height="200"/>
+            <RowDefinition Height="70*" />
+            <RowDefinition Height="30*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition Width="400"/>
+            <ColumnDefinition Width="65*" />
+            <ColumnDefinition Width="35*"/>
         </Grid.ColumnDefinitions>
-        <WindowsFormsHost x:Name="wfh_canvas1" Grid.Column="0" Grid.Row="0" Margin="4,4,2,2" SizeChanged="Wfh_canvas1_SizeChanged"  >
+        <Border x:Name="wfh1_border" BorderBrush="Black" BorderThickness="1" Grid.Column="0" Grid.Row="0" Margin="4,4,2,2" GotFocus="Border_GotFocus" LostFocus="Border_LostFocus" PreviewMouseWheel="Wfh1_border_PreviewMouseWheel" MouseEnter="Wfh1_border_MouseEnter" >
+        <WindowsFormsHost x:Name="wfh_canvas1"  SizeChanged="WFH_SizeChanged"  >
             <!--<winfrom:Panel x:Name="aisys_canvas1" Width="640" Height="480" BorderStyle="FixedSingle"  />-->
         </WindowsFormsHost>
+        </Border>
 
 
         <Grid Grid.Column="0" Grid.Row="1">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto" />
                 <ColumnDefinition />
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
@@ -35,13 +37,15 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-            <WindowsFormsHost Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="5" x:Name="wfh_canvas2" Margin="4,2,2,4" SizeChanged="Wfh_canvas2_SizeChanged"  >
+            <Border x:Name="wfh2_border" BorderBrush="Black" BorderThickness="1"  Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="0" Grid.RowSpan="5" Margin="4,2,2,4"  GotFocus="Border_GotFocus" LostFocus="Border_LostFocus">
+                <WindowsFormsHost x:Name="wfh_canvas2"  SizeChanged="WFH_SizeChanged" >
                 <!--<winfrom:Panel x:Name="aisys_canvas2" Width="100" Height="100" BorderStyle="FixedSingle"/>-->
             </WindowsFormsHost>
-            <Button Grid.Column="2" Grid.Row="0" x:Name="Tech_btn" Content="Get Target" Margin="5" Click="Tech_btn_Click"/>
-            <Button Grid.Column="2" Grid.Row="1" x:Name="SetMatchRec" Content="Set Detect Area" Margin="5" Click="SetMatchRec_Click"/>
-            <Button Grid.Column="2" Grid.Row="2" x:Name="Match_btn" Content="Match" Margin="5" Click="Match_btn_Click"/>
-            <Button Grid.Column="2" Grid.Row="4" x:Name="Cam_Control" Content="Cam Control" Margin="5" Click="Cam_Control_Click"/>
+            </Border>
+            <Button Grid.Column="1" Grid.Row="0" x:Name="Tech_btn" Content="Get Target" Margin="5" Click="Tech_btn_Click"/>
+            <Button Grid.Column="1" Grid.Row="1" x:Name="SetMatchRec" Content="Set Detect Area" Margin="5" Click="SetMatchRec_Click"/>
+            <Button Grid.Column="1" Grid.Row="2" x:Name="Match_btn" Content="Match" Margin="5" Click="Match_btn_Click"/>
+            <Button Grid.Column="1" Grid.Row="3" x:Name="Cam_Control" Content="Cam Control" Margin="5" Click="Cam_Control_Click"/>
 
 
             <TextBlock Grid.Column="3" Grid.Row="0" x:Name="p_cx" Text="中心座標 X:0"/>
@@ -56,9 +60,11 @@
         <Grid Grid.Column="1" Grid.Row="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <GroupBox Header="座標" Grid.Row="0" Margin="4,2">
+            
+            <GroupBox Header="座標" Grid.Row="0" Margin="2,4,4,2">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
@@ -79,7 +85,7 @@
                     <TextBlock Grid.Column="2" Grid.Row="1" Text="Y:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
                     <TextBlock Grid.Column="4" Grid.Row="1" Text="Z:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
 
-                    <TextBlock x:Name="Xloc" Grid.Column="1" Grid.Row="0" Foreground="Lime" Background="Black" Text="0000.000" TextAlignment="Right" VerticalAlignment="Center" Margin="2"/>
+                    <TextBlock x:Name="Xloc" Grid.Column="1" Grid.Row="0" Foreground="Lime" Background="Black" Text="0000.000" TextAlignment="Right" VerticalAlignment="Center" Margin="2" IsEnabled="False"/>
                     <TextBlock x:Name="Yloc" Grid.Column="3" Grid.Row="0" Foreground="Lime" Background="Black" Text="0000.000" TextAlignment="Right" VerticalAlignment="Center" Margin="2" />
                     <TextBlock x:Name="Zloc" Grid.Column="5" Grid.Row="0" Foreground="Lime" Background="Black" Text="0000.000" TextAlignment="Right" VerticalAlignment="Center" Margin="2"/>
                     <TextBlock x:Name="Xenc" Grid.Column="1" Grid.Row="1" Foreground="Red" Background="Black" Text="0000.000" TextAlignment="Right" VerticalAlignment="Center" Margin="2"/>
@@ -89,7 +95,42 @@
 
                 </Grid>
             </GroupBox>
-            <TabControl Grid.Column="0" Grid.Row="1" x:Name="tabControl" Margin="2,4,4,2" >
+
+            <GroupBox Grid.Row="1" Header="Table Status" Margin="2,2,4,2" >
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <RadioButton Grid.Column="0" Grid.Row="0" x:Name="LX" Content="+X" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="1" IsTabStop="False" GroupName="LX" IsChecked="True" Click="RadioButton_Checked"/>
+                    <RadioButton Grid.Column="1" Grid.Row="0" x:Name="RX" Content="-X" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="1" IsTabStop="False" GroupName="RX" IsChecked="True" Click="RadioButton_Checked"/>
+                    <RadioButton Grid.Column="2" Grid.Row="0" x:Name="HX" Content="X Home" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="1" IsTabStop="False" GroupName="HX" IsChecked="True" Click="RadioButton_Checked" />
+                    <RadioButton Grid.Column="3" Grid.Row="0" x:Name="PX" Content="X Pos" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="1" IsTabStop="False" GroupName="PX"  IsChecked="True" Click="RadioButton_Checked"/>
+                    <RadioButton Grid.Column="4" Grid.Row="0" x:Name="MX" Content="X Move" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="1" IsTabStop="False" GroupName="MX" IsChecked="True" Click="RadioButton_Checked" />
+
+                    <RadioButton Grid.Column="0" Grid.Row="1" x:Name="LY" Content="+Y" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="1" IsTabStop="False" GroupName="LY" IsChecked="True" Click="RadioButton_Checked" />
+                    <RadioButton Grid.Column="1" Grid.Row="1" x:Name="RY" Content="-Y" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="1" IsTabStop="False" GroupName="RY" IsChecked="True" Click="RadioButton_Checked"/>
+                    <RadioButton Grid.Column="2" Grid.Row="1" x:Name="HY" Content="Y Home" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="1" IsTabStop="False" GroupName="HY" IsChecked="True" Click="RadioButton_Checked" />
+                    <RadioButton Grid.Column="3" Grid.Row="1" x:Name="PY" Content="Y Pos" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="1" IsTabStop="False" GroupName="PY" IsChecked="True" Click="RadioButton_Checked" />
+                    <RadioButton Grid.Column="4" Grid.Row="1" x:Name="MY" Content="Y Move" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="1" IsTabStop="False" GroupName="MY" IsChecked="True" Click="RadioButton_Checked"/>
+
+                    <RadioButton Grid.Column="0" Grid.Row="2" x:Name="LZ" Content="+Z" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="1" IsTabStop="False" GroupName="LZ" IsChecked="True" Click="RadioButton_Checked"/>
+                    <RadioButton Grid.Column="1" Grid.Row="2" x:Name="RZ" Content="-Z" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="1" IsTabStop="False" GroupName="RZ" IsChecked="True" Click="RadioButton_Checked"/>
+                    <RadioButton Grid.Column="2" Grid.Row="2" x:Name="HZ" Content="Z Home" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="1" IsTabStop="False" GroupName="HZ" IsChecked="True" Click="RadioButton_Checked"/>
+                    <RadioButton Grid.Column="3" Grid.Row="2" x:Name="PZ" Content="Z Pos" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="1" IsTabStop="False" GroupName="PZ" IsChecked="True" Click="RadioButton_Checked"/>
+                    <RadioButton Grid.Column="4" Grid.Row="2" x:Name="MZ" Content="Z Move" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="1" IsTabStop="False" GroupName="MZ" IsChecked="True" Click="RadioButton_Checked"/>
+                </Grid>
+            </GroupBox>
+
+            <TabControl Grid.Column="0" Grid.Row="2" x:Name="tabControl" Margin="2,4,4,2" >
                 <TabItem Header="TabItem1">
                     <Grid >
                         <Grid.RowDefinitions>
@@ -109,7 +150,7 @@
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="auto"/>
-                                        <ColumnDefinition Width="154"/>
+                                        <ColumnDefinition />
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="auto"/>
@@ -117,8 +158,8 @@
                                     </Grid.RowDefinitions>
                                     <TextBlock Grid.Column="0" Grid.Row="0" Text="X:" Margin="5"/>
                                     <TextBlock Grid.Column="0" Grid.Row="1" Text="Y:" Margin="5"/>
-                                    <TextBox Grid.Column="1" Grid.Row="0" x:Name="X_res" Text="0.005401" Height="17" Margin="5" TextChanged="X_res_TextChanged"/>
-                                    <TextBox Grid.Column="1" Grid.Row="1" x:Name="Y_res" Text="0.005401" Height="17" Margin="5" TextChanged="Y_res_TextChanged"/>
+                                    <TextBox Grid.Column="1" Grid.Row="0" x:Name="X_res" Text="0.005401" Height="17" Margin="5" TextChanged="TextBox_TextChanged" GotFocus="TextBox_GotFocus"  />
+                                    <TextBox Grid.Column="1" Grid.Row="1" x:Name="Y_res" Text="0.005401" Height="17" Margin="5" TextChanged="TextBox_TextChanged" GotFocus="TextBox_GotFocus" />
                                 </Grid>
                             </GroupBox>
                             <GroupBox Header="攝像機與雕刻頭相對位置" Grid.Column="1" Margin="4,2">
@@ -133,8 +174,8 @@
                                     </Grid.RowDefinitions>
                                     <TextBlock Grid.Column="0" Grid.Row="0" Text="X:" Margin="5"/>
                                     <TextBlock Grid.Column="0" Grid.Row="1" Text="Y:" Margin="5"/>
-                                    <TextBox Grid.Column="1" Grid.Row="0" x:Name="X_dis" Text="0" Height="17" Margin="5"/>
-                                    <TextBox Grid.Column="1" Grid.Row="1" x:Name="Y_dis" Text="0" Height="17" Margin="5"/>
+                                    <TextBox Grid.Column="1" Grid.Row="0" x:Name="X_dis" Text="0" Height="17" Margin="5" GotFocus="TextBox_GotFocus"/>
+                                    <TextBox Grid.Column="1" Grid.Row="1" x:Name="Y_dis" Text="0" Height="17" Margin="5" GotFocus="TextBox_GotFocus"/>
                                 </Grid>
                             </GroupBox>
                         </Grid>
@@ -210,18 +251,24 @@
                                             <RowDefinition/>
                                         </Grid.RowDefinitions>
                                         <TextBlock Grid.Column="0" Grid.Row="0" Text="Jog Dis.:" VerticalAlignment="Center" Margin="2" HorizontalAlignment="Right"/>
-                                        <TextBox Grid.Column="1" Grid.Row="0" x:Name="mo_jogdis" Text="1" Height="17" Margin="2"/>
+                                        <TextBox Grid.Column="1" Grid.Row="0" x:Name="mo_jogdis" Text="1" Height="17" Margin="2" GotFocus="TextBox_GotFocus"/>
 
                                         <TextBlock Grid.Column="0" Grid.Row="1" Text="X:" Margin="2" HorizontalAlignment="Right"/>
                                         <TextBlock Grid.Column="0" Grid.Row="2" Text="Y:" Margin="2" HorizontalAlignment="Right"/>
                                         <TextBlock Grid.Column="0" Grid.Row="3" Text="Z:" Margin="2" HorizontalAlignment="Right"/>
-                                        <TextBox Grid.Column="1" Grid.Row="1" x:Name="mo_X" Text="0" Height="17" Margin="2"/>
-                                        <TextBox Grid.Column="1" Grid.Row="2" x:Name="mo_Y" Text="0" Height="17" Margin="2"/>
-                                        <TextBox Grid.Column="1" Grid.Row="3" x:Name="mo_Z" Text="0" Height="17" Margin="2"/>
-                                        <RadioButton Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" x:Name="mo_opt1" Margin="2" Content="相對位置移動" VerticalContentAlignment="Center" IsChecked="True" Checked="RadioButton_Checked"/>
-                                        <RadioButton Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="5" x:Name="mo_opt0" Margin="2" Content="絕對位置移動" VerticalContentAlignment="Center" Checked="RadioButton_Checked"/>
-                                        <Button Grid.Column="0" Grid.Row="6" x:Name="mo_control" Content="XY Setup" Margin="5" Click="Mo_control_Click"/>
-                                        <Button Grid.Column="1" Grid.Row="6" x:Name="mo_MoveXYZ" Content="Move XYZ To" Margin="5" Click="Mo_MoveXYZ_Click"/>
+                                        <TextBox Grid.Column="1" Grid.Row="1" x:Name="mo_X" Text="0" Height="17" Margin="2" GotFocus="TextBox_GotFocus"/>
+                                        <TextBox Grid.Column="1" Grid.Row="2" x:Name="mo_Y" Text="0" Height="17" Margin="2" GotFocus="TextBox_GotFocus"/>
+                                        <TextBox Grid.Column="1" Grid.Row="3" x:Name="mo_Z" Text="0" Height="17" Margin="2" GotFocus="TextBox_GotFocus"/>
+                                        <RadioButton Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" x:Name="mo_opt1" Margin="2" Content="相對位置移動" VerticalContentAlignment="Center" HorizontalAlignment="Right" IsChecked="True" Checked="RadioButton_Checked"/>
+                                        <RadioButton Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="5" x:Name="mo_opt0" Margin="2" Content="絕對位置移動" VerticalContentAlignment="Center" HorizontalAlignment="Right" Checked="RadioButton_Checked"/>
+                                        <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="6">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                        <Button Grid.Column="0" x:Name="mo_control" Content="XY Setup" Margin="5" Click="Mo_control_Click"/>
+                                        <Button Grid.Column="1" x:Name="mo_MoveXYZ" Content="Move XYZ To" Margin="5" Click="Mo_MoveXYZ_Click"/>
+                                        </Grid>
 
                                     </Grid>
 
@@ -259,9 +306,9 @@
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto"/>
                                     <ColumnDefinition />
-                                    <ColumnDefinition />
-                                    <ColumnDefinition />
                                     <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition />
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="auto"/>
@@ -281,12 +328,12 @@
                                 <TextBlock Grid.Column="0" Grid.Row="6" Text="填滿間距:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
 
                                 <TextBox Grid.Column="1" Grid.Row="0" x:Name="GetCorrectDim" Height="17" Margin="2"/>
-                                <TextBox Grid.Column="1" Grid.Row="1" x:Name="SetGriddiameter" Text="0.5" Height="17" Margin="2"/>
-                                <TextBox Grid.Column="1" Grid.Row="2" x:Name="SetLensCorSpeed" Text="800" Height="17" Margin="2"/>
-                                <TextBox Grid.Column="1" Grid.Row="3" x:Name="SetLenscorPower" Text="20" Height="17" Margin="2"/>
-                                <TextBox Grid.Column="1" Grid.Row="4" x:Name="SetLensCorFrequerncy" Text="20" Height="17" Margin="2"/>
-                                <TextBox Grid.Column="1" Grid.Row="5" x:Name="SetLenscorPulseWidth" Text="1" Height="17" Margin="2"/>
-                                <TextBox Grid.Column="1" Grid.Row="6" x:Name="SetLenscorfillPitch" Text="0.03" Height="17" Margin="2" />
+                                <TextBox Grid.Column="1" Grid.Row="1" x:Name="SetGriddiameter" Text="0.5" Height="17" Margin="2" GotFocus="TextBox_GotFocus"/>
+                                <TextBox Grid.Column="1" Grid.Row="2" x:Name="SetLensCorSpeed" Text="800" Height="17" Margin="2" GotFocus="TextBox_GotFocus"/>
+                                <TextBox Grid.Column="1" Grid.Row="3" x:Name="SetLenscorPower" Text="20" Height="17" Margin="2" GotFocus="TextBox_GotFocus"/>
+                                <TextBox Grid.Column="1" Grid.Row="4" x:Name="SetLensCorFrequerncy" Text="20" Height="17" Margin="2" GotFocus="TextBox_GotFocus"/>
+                                <TextBox Grid.Column="1" Grid.Row="5" x:Name="SetLenscorPulseWidth" Text="1" Height="17" Margin="2" GotFocus="TextBox_GotFocus"/>
+                                <TextBox Grid.Column="1" Grid.Row="6" x:Name="SetLenscorfillPitch" Text="0.03" Height="17" Margin="2"  GotFocus="TextBox_GotFocus"/>
 
 
                                 <TextBlock Grid.Column="2" Grid.Row="1" Text="mm" VerticalAlignment="Center" Margin="2"/>
@@ -322,8 +369,8 @@
                                         <Image Source="Properties/5.png" Stretch="Uniform" Height="16"/>
                                     </ComboBoxItem>
                                 </ComboBox>
-                                
-                                <TextBox Grid.Column="4" Grid.Row="1" x:Name="delaytime" Text="1" Height="17" VerticalAlignment="Center" Margin="2"/>
+
+                                <TextBox Grid.Column="4" Grid.Row="1" x:Name="delaytime" Text="1" Height="17" VerticalAlignment="Center" Margin="2" GotFocus="TextBox_GotFocus"/>
                                 <RadioButton Grid.Column="4" Grid.Row="2" Content="輸出點" IsChecked="True" Checked="RadioButton_Checked" x:Name="SGMT1" Margin="2" VerticalAlignment="Center"/>
                                 <RadioButton Grid.Column="4" Grid.Row="3" Content="輸出線" Checked="RadioButton_Checked" x:Name="SGMT2" Margin="2" VerticalAlignment="Center"/>
                                 <CheckBox Grid.Column="4" Grid.Row="4" Content="輸出文字" x:Name="SOT" Margin="2" VerticalAlignment="Center" Click="SOT_Click"/>
@@ -340,6 +387,56 @@
                         </GroupBox>
                     </Grid>
                 </TabItem>
+
+                <TabItem Header="軸控補償">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                    <GroupBox Header=" 軸控補償功能">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Grid.Row="0" Text=" Move Space:"/>
+                                <TextBlock Grid.Column="0" Grid.Row="1" Text="Delay Time:"/>
+                                <TextBox Grid.Column="1" Grid.Row="0" x:Name="MoveSpace" Text="1"/>
+                                <TextBox Grid.Column="1" Grid.Row="1" x:Name="DelayTime" Text="1"/>
+                                <TextBlock Grid.Column="2" Grid.Row="0" Text="Axis:"/>
+                                <TextBlock Grid.Column="2" Grid.Row="1" Text="Sec."/>
+                                <ComboBox Grid.Column="3" Grid.Row="0" x:Name="AxisSel" SelectedIndex="0">
+                                    <ComboBoxItem Content="1-Axis"/>
+                                    <ComboBoxItem Content="2-Axis"/>
+                                    <ComboBoxItem Content="3-Axis"/>
+                                </ComboBox>
+                                <Grid Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Button Grid.Column="0" Margin="1" x:Name="Run" Content="Run" Click="Run_Click"/>
+
+                                    <Button Grid.Column="1" Margin="1" x:Name="Apply" Content="Apply" Click="Apply_Click"/>
+
+                                    <Button Grid.Column="2" Margin="1" x:Name="Exit" Content="Exit" Click="Exit_Click"/>
+
+                                </Grid>
+                                
+
+                            </Grid>
+                    </GroupBox>
+                    </Grid>
+                </TabItem>
             </TabControl>
 
         </Grid>
@@ -347,7 +444,7 @@
 
         <GroupBox Header="System Message" Grid.Column="1" Grid.Row="1" Margin="2,0,2,4" >
             <Grid>
-                <RichTextBox x:Name="SysMsg" BorderThickness="1" BorderBrush="Black">
+                <RichTextBox x:Name="SysMsg" BorderThickness="1" BorderBrush="Black" IsReadOnly="True">
                     <RichTextBox.Resources>
                         <Style TargetType="Paragraph">
                             <Setter Property="Margin" Value="0"/>

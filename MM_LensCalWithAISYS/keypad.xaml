@@ -1,0 +1,37 @@
+﻿<UserControl x:Class="MM_LensCalWithAISYS.keypad"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MM_LensCalWithAISYS"
+             mc:Ignorable="d" 
+             d:DesignHeight="120" d:DesignWidth="120">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="30"/>
+            <ColumnDefinition Width="30"/>
+            <ColumnDefinition Width="30"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Button Grid.Column="0" Grid.Row="0" x:Name="keypad7" Content="7" Margin="2"/>
+        <Button Grid.Column="1" Grid.Row="0" x:Name="keypad8" Content="8" Margin="2"/>
+        <Button Grid.Column="2" Grid.Row="0" x:Name="keypad9" Content="9" Margin="2"/>
+        <Button Grid.Column="0" Grid.Row="1" x:Name="keypad4" Content="4" Margin="2"/>
+        <Button Grid.Column="1" Grid.Row="1" x:Name="keypad5" Content="5" Margin="2"/>
+        <Button Grid.Column="2" Grid.Row="1" x:Name="keypad6" Content="6" Margin="2"/>
+        <Button Grid.Column="0" Grid.Row="2" x:Name="keypad1" Content="1" Margin="2"/>
+        <Button Grid.Column="1" Grid.Row="2" x:Name="keypad2" Content="2" Margin="2"/>
+        <Button Grid.Column="2" Grid.Row="2" x:Name="keypad3" Content="3" Margin="2"/>
+        <Button Grid.Column="0" Grid.Row="3" x:Name="keypad0" Content="0" Margin="2"/>
+
+
+        <Button Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="3" x:Name="keypadEnter" Content="Enter" Margin="2" Click="KeypadEnter_Click"/>
+
+    </Grid>
+</UserControl>
