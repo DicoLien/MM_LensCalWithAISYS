@@ -248,6 +248,7 @@
                                             <RowDefinition Height="auto"/>
                                             <RowDefinition Height="auto"/>
                                             <RowDefinition Height="auto"/>
+                                            <RowDefinition Height="auto"/>
                                             <RowDefinition/>
                                         </Grid.RowDefinitions>
                                         <TextBlock Grid.Column="0" Grid.Row="0" Text="Jog Dis.:" VerticalAlignment="Center" Margin="2" HorizontalAlignment="Right"/>
@@ -261,13 +262,14 @@
                                         <TextBox Grid.Column="1" Grid.Row="3" x:Name="mo_Z" Text="0" Height="17" Margin="2" GotFocus="TextBox_GotFocus"/>
                                         <RadioButton Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" x:Name="mo_opt1" Margin="2" Content="相對位置移動" VerticalContentAlignment="Center" HorizontalAlignment="Right" IsChecked="True" Checked="RadioButton_Checked"/>
                                         <RadioButton Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="5" x:Name="mo_opt0" Margin="2" Content="絕對位置移動" VerticalContentAlignment="Center" HorizontalAlignment="Right" Checked="RadioButton_Checked"/>
-                                        <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="6">
+                                        <CheckBox Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="6" x:Name="Follo_encoder" Margin="2" Content="跟隨編碼器" VerticalAlignment="Center" HorizontalAlignment="Right" IsChecked="True" Checked="Follo_encoder_Checked"/>
+                                        <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="7">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition/>
                                                 <ColumnDefinition/>
                                             </Grid.ColumnDefinitions>
                                         <Button Grid.Column="0" x:Name="mo_control" Content="XY Setup" Margin="5" Click="Mo_control_Click"/>
-                                        <Button Grid.Column="1" x:Name="mo_MoveXYZ" Content="Move XYZ To" Margin="5" Click="Mo_MoveXYZ_Click"/>
+                                        <Button Grid.Column="1" x:Name="mo_MoveXYZ" Content="Move XYZ To" Margin="5" Click="Mo_MoveXYZ_Click" IsEnabled="False"/>
                                         </Grid>
 
                                     </Grid>
@@ -288,7 +290,7 @@
 
                     </Grid>
                 </TabItem>
-                <TabItem Header="TabItem2">
+                <TabItem Header="鏡頭校正">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="13*"/>

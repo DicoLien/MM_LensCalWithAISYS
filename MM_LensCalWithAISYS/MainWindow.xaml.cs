@@ -72,7 +72,7 @@ namespace MM_LensCalWithAISYS
         //common
         //
         string tempstr, caltempstr;
-        bool g_Tech, g_SetArea, have_setarea, c_Det, have_learn, mm_startcal, initmm, _IsMotion, _XIsMove, _YIsMove, _ZIsMove;
+        bool g_Tech, g_SetArea, have_setarea, c_Det, have_learn, mm_startcal, initmm, _IsMotion, _XIsMove, _YIsMove, _ZIsMove, _FollowEncoder;
         int sa_X, sa_Y, sa_W, sa_H, DT, Axis;
         float p_centerX, p_centerY, r_centerX, r_centerY, mm_x, mm_y;
         private FlowDocument doc = new FlowDocument();
@@ -156,31 +156,37 @@ namespace MM_LensCalWithAISYS
                 {
                     MX.IsChecked = true;
                     _XIsMove = true;
+                    //mo_MoveXYZ.IsEnabled = false;
                 }
                 else
                 {
                     MX.IsChecked = false;
                     _XIsMove = false;
+                    //mo_MoveXYZ.IsEnabled = true;
                 }
                 if ((iStatus & 4) != 0)
                 {
                     MY.IsChecked = true;
                     _YIsMove = true;
+                    //mo_MoveXYZ.IsEnabled = false;
                 }
                 else
                 {
                     MY.IsChecked = false;
                     _YIsMove = false;
+                    //mo_MoveXYZ.IsEnabled = true;
                 }
                 if ((iStatus & 8) != 0)
                 {
                     MZ.IsChecked = true;
                     _ZIsMove = true;
+                    //mo_MoveXYZ.IsEnabled = false;
                 }
                 else
                 {
                     MZ.IsChecked = false;
                     _ZIsMove = false;
+                    //mo_MoveXYZ.IsEnabled = true;
                 }
                 //
                 //正極限
@@ -501,6 +507,8 @@ namespace MM_LensCalWithAISYS
         {
             //InitAisys();
             //AutoCreateChannel();
+
+            mo_MoveXYZ.IsEnabled = true;
 
         }
 
@@ -874,6 +882,14 @@ namespace MM_LensCalWithAISYS
             }
         }
 
+        private void Follo_encoder_Checked(object sender, RoutedEventArgs e)
+        {
+            if(Follo_encoder.IsChecked == true)
+            { _FollowEncoder = true;  }
+            else
+            { _FollowEncoder = false; }
+        }
+
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
 
@@ -971,6 +987,8 @@ namespace MM_LensCalWithAISYS
 
         private void Mo_toCCDdown_Click(object sender, RoutedEventArgs e)
         {
+            if (axMotion.IsMotion(0) != 0)
+            { return; }
             axMotion.GetCurPosition(ref dX, ref dY, ref dZ, ref dR, 1);
             double endX = dX + Convert.ToDouble(X_dis.Text);
             double endY = dY + Convert.ToDouble(Y_dis.Text);
@@ -980,7 +998,10 @@ namespace MM_LensCalWithAISYS
             //    0,
             //    0,
             //    1);
-            mmMoveTo(endX, endY, 0);
+            ThreadPool.QueueUserWorkItem(o =>
+            {
+                mmMoveTo(endX, endY, 0);
+            });
             
         }
 
@@ -1077,34 +1098,93 @@ namespace MM_LensCalWithAISYS
         }
         private void mmMoveTo(double X, double Y, double Z)
         {
-
-                axMotion.MoveTo(X, Y, Z, 0, 0);
-                for (; ; )
+            axMotion.MoveTo(X, Y, Z, 0, 0);
+            for (; ; )
+            {
+                if (axMotion.IsMotion(0) == 0)
                 {
-                    if (axMotion.IsMotion(0) == 0)
+                    if (_FollowEncoder)
                     {
-                        tempstr = "Done.";
-                        UpdateSysMsgStatus();
-                        return;
+                        if (eX != 0 || eY != 0 || eZ != 0)
+                        {
+                            double tempX = dX - eX, tempY = dY - eY, tempZ = dZ - eZ;
+                            encMoveTo(tempX, tempY, tempZ);
+                        }
+                        else
+                        {
+                            tempstr = "Encoder not work!";
+                            UpdateSysMsgStatus();
+                        }
                     }
-
+                    tempstr = "Done.";
+                    UpdateSysMsgStatus();
+                    return;
                 }
+            }
+        }
+        private void mmMoveTo0(double X, double Y, double Z)
+        {
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                axMotion.MoveTo(X, Y, Z, 0, 0);
+                //for (; ; )
+                //{
+                //    if (axMotion.IsMotion(0) == 0)
+                //    {
+                //        //if (_FollowEncoder)
+                //        //{
+                //        //    double tempX = dX - eX, tempY = dY - eY, tempZ = dZ - eZ;
 
+                //        //}
+                //        tempstr = "Done.";
+                //        UpdateSysMsgStatus();
+                //        return;
+                //    }
+                //}
+                tempstr = "Done.";
+                UpdateSysMsgStatus();
+            }));
         }
         private void mmMoveTo1(double X, double Y, double Z)
         {
-
-                axMotion.MoveTo(X, Y, Z, 0, 1);
-                for (; ; )
+            axMotion.MoveTo(X, Y, Z, 0, 1);
+            for (; ; )
+            {
+                if (axMotion.IsMotion(0) == 0)
                 {
-                    if (axMotion.IsMotion(0) == 0)
+                    if(_FollowEncoder)
                     {
-                        tempstr = "Done.";
-                        UpdateSysMsgStatus();
-                        return;
+                        if (eX != 0 || eY != 0 || eZ != 0)
+                        {
+                            double tempX = dX - eX, tempY = dY - eY, tempZ = dZ - eZ;
+                            encMoveTo(tempX, tempY, tempZ);
+                        }
+                        else
+                        {
+                            tempstr = "Encoder not work!";
+                            UpdateSysMsgStatus();
+                        }
                     }
-
+                    tempstr = "done.";
+                    UpdateSysMsgStatus();
+                    return;
                 }
+            }
+
+        }
+
+        private void encMoveTo(double X, double Y, double Z)
+        {
+            axMotion.MoveTo(X, Y, Z, 0, 1);
+            for (; ; )
+            {
+                if (axMotion.IsMotion(0) == 0)
+                {
+                    //tempstr = "Done.";
+                    //UpdateSysMsgStatus();
+                    return;
+                }
+            }
         }
         private void DoOutPut()
         {
@@ -1130,13 +1210,28 @@ namespace MM_LensCalWithAISYS
             System.Windows.MessageBox.Show("Calibration Finish.");
         }
 
+        private void SetMo_MoveXYZStatus(bool value)
+        {
+            mo_MoveXYZ.IsEnabled = value;
+        }
+
         private void Mo_MoveXYZ_Click(object sender, RoutedEventArgs e)
         {
+            //SetMo_MoveXYZStatus(false);
+            if (axMotion.IsMotion(0) != 0)
+            {return;}
+            double goX = Convert.ToDouble(mo_X.Text);
+            double goY = Convert.ToDouble(mo_Y.Text);
+            double goZ = Convert.ToDouble(mo_Z.Text);
             if (mm_opt == 0)
             {
 
                 UpdateSysMsg(SysMsg, "Move To X:" + mo_X.Text + " Y:" + mo_Y.Text + " Z:" + mo_Z.Text);
-                mmMoveTo(Convert.ToDouble(mo_X.Text), Convert.ToDouble(mo_Y.Text), Convert.ToDouble(mo_Z.Text));
+                ThreadPool.QueueUserWorkItem(o =>
+                {
+                    mmMoveTo(goX, goY, goZ);
+                });
+
                 //axMotion.MoveTo(Convert.ToDouble(mo_X.Text),
                 //    Convert.ToDouble(mo_Y.Text),
                 //    Convert.ToDouble(mo_Z.Text),
@@ -1145,7 +1240,9 @@ namespace MM_LensCalWithAISYS
             }
             else
             {
+
                 axMotion.GetCurPosition(ref dX, ref dY, ref dZ, ref dR, 1);
+
                 double endX = dX + Convert.ToDouble(mo_X.Text);
                 double endY = dY + Convert.ToDouble(mo_Y.Text);
                 double endZ = dZ + Convert.ToDouble(mo_Z.Text);
@@ -1153,13 +1250,29 @@ namespace MM_LensCalWithAISYS
                 UpdateSysMsg(SysMsg, "Move To X:" + dX.ToString() + "->" + endX.ToString() + 
                     " Y:" + dY.ToString() + "->" + endY.ToString() + 
                     " Z:" + dZ.ToString() + "->" + endZ.ToString());
-                mmMoveTo(Convert.ToDouble(mo_X.Text), Convert.ToDouble(mo_Y.Text), Convert.ToDouble(mo_Z.Text));
-                //axMotion.MoveTo(Convert.ToDouble(mo_X.Text),
-                //    Convert.ToDouble(mo_Y.Text),
-                //    Convert.ToDouble(mo_Z.Text),
-                //    0,
-                //    mm_opt);
+                ThreadPool.QueueUserWorkItem(o =>
+                {
+                    mmMoveTo1(goX, goY, goZ);
+                });
+                //if(!Dispatcher.CheckAccess())
+                //{
+                //    Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Normal, new Action<double, double, double>(mmMoveTo1), goX, goY, goZ);
+                //}
+                //else { mmMoveTo1(goX, goY, goZ); }
+
+                //ThreadPool.QueueUserWorkItem(o =>
+                //{
+                //    mmMoveTo1(Convert.ToDouble(mo_X.Text), Convert.ToDouble(mo_Y.Text), Convert.ToDouble(mo_Z.Text));
+                //    axMotion.MoveTo(Convert.ToDouble(mo_X.Text),
+                //        Convert.ToDouble(mo_Y.Text),
+                //        Convert.ToDouble(mo_Z.Text),
+                //        0,
+                //        mm_opt);
+                //});
+
+                //UpdateSysMsg(SysMsg, "Done.");
             }
+            SetMo_MoveXYZStatus(true);
         }
 
         private void SOT_Click(object sender, RoutedEventArgs e)
