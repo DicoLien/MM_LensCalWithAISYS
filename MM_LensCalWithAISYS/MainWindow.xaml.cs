@@ -72,7 +72,7 @@ namespace MM_LensCalWithAISYS
         //common
         //
         string tempstr, caltempstr;
-        bool g_Tech, g_SetArea, have_setarea, c_Det, have_learn, mm_startcal, initmm, _IsMotion, _XIsMove, _YIsMove, _ZIsMove, _FollowEncoder;
+        bool g_Tech, g_SetArea, have_setarea, c_Det, have_learn, mm_startcal, initmm, _IsMotion, _XIsMove, _YIsMove, _ZIsMove, _FollowEncoder,_FollowEncoderInCal;
         int sa_X, sa_Y, sa_W, sa_H, DT, Axis;
         float p_centerX, p_centerY, r_centerX, r_centerY, mm_x, mm_y;
         private FlowDocument doc = new FlowDocument();
@@ -882,13 +882,7 @@ namespace MM_LensCalWithAISYS
             }
         }
 
-        private void Follo_encoder_Checked(object sender, RoutedEventArgs e)
-        {
-            if(Follo_encoder.IsChecked == true)
-            { _FollowEncoder = true;  }
-            else
-            { _FollowEncoder = false; }
-        }
+
 
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
@@ -924,6 +918,40 @@ namespace MM_LensCalWithAISYS
             cal.AppendText(Convert.ToDouble(Zloc.Text).ToString("0.0000") + " " + Enctemp1.ToString("0.0000") + Environment.NewLine);
 
         }
+
+        private void FollowEncoderInCal_Click(object sender, RoutedEventArgs e)
+        {
+            if (FollowEncoderInCal.IsChecked == true)
+            {
+                _FollowEncoderInCal = true;
+            }
+            else
+            {
+                _FollowEncoderInCal = false;
+            }
+        }
+
+        private void Follo_encoder_Click(object sender, RoutedEventArgs e)
+        {
+            if(Follo_encoder.IsChecked == true)
+            {
+                _FollowEncoder = true;
+            }
+            else { _FollowEncoder = false; }
+        }
+
+        private void Follo_encoder_Checked(object sender, RoutedEventArgs e)
+        {
+
+
+        }
+
+        private void FollowEncoderInCal_Checked(object sender, RoutedEventArgs e)
+        {
+
+
+        }
+
         private void Z_Motion()
         {
             axMotion.MoveTo(0, 0, sp, 0, 1);
@@ -1088,9 +1116,17 @@ namespace MM_LensCalWithAISYS
                         Thread.Sleep(DT);
                         StartMatch();
                     }
-                    axMotion.GetCurPosition(ref dX, ref dY, ref dZ, ref dR, 0);
-                    //Pxy.AddRange(new xylist[] { new xylist(0, 0, 0) });
-                    CalList.AddRange(new XYCal[] { new XYCal(i, dY, dX) });
+                    if (_FollowEncoderInCal)
+                    {
+                        //axMotion.GetCurPosition(ref eX, ref eY, ref eZ, ref dR, 1);
+                        CalList.AddRange(new XYCal[] { new XYCal(i, eY, eX) });
+                    }
+                    else
+                    {
+                        //axMotion.GetCurPosition(ref dX, ref dY, ref dZ, ref dR, 0);
+                        //Pxy.AddRange(new xylist[] { new xylist(0, 0, 0) });
+                        CalList.AddRange(new XYCal[] { new XYCal(i, dY, dX) });
+                    }
                 }
             }
             mm_startcal = false;
