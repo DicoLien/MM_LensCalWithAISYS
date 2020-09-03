@@ -67,19 +67,20 @@ namespace MM_LensCalWithAISYS
 
         bool bLockROI1Flag, bLockROI2Flag, bCircleMsrFlag, AisysIsCreate;
         float g_fZoomX, g_fZoomY, g_fZoomX2, g_fZoomY2, org_fZoomX, org_fZoomY;
-
+        int InnerRadius, OuterRadius;
+        double miniPixel;
         //
         //common
         //
         string tempstr, caltempstr;
         bool g_Tech, g_SetArea, have_setarea, c_Det, have_learn, mm_startcal, initmm, _IsMotion, _XIsMove, _YIsMove, _ZIsMove, _FollowEncoder,_FollowEncoderInCal;
         int sa_X, sa_Y, sa_W, sa_H, DT, Axis;
-        float p_centerX, p_centerY, r_centerX, r_centerY, mm_x, mm_y;
+        float p_centerX, p_centerY, r_centerX, r_centerY;
         private FlowDocument doc = new FlowDocument();
         private delegate void UpdateSysMsgCallBack(System.Windows.Controls.RichTextBox ctl, string value, string color);
         private delegate void UpdateXYZCallBack(TextBlock ctl, string value);
         private delegate void UpdateTextBoxCallBack(System.Windows.Controls.TextBox ctl, string value);
-        float resX, resY;
+        double resX, resY, mm_x, mm_y;
         double AxisField, sp;
         System.Windows.Controls.TextBox cal = new System.Windows.Controls.TextBox();
         List<XYCal> CalList = new List<XYCal>();
@@ -506,7 +507,7 @@ namespace MM_LensCalWithAISYS
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             //InitAisys();
-            //AutoCreateChannel();
+            AutoCreateChannel();
 
             mo_MoveXYZ.IsEnabled = true;
 
@@ -569,6 +570,10 @@ namespace MM_LensCalWithAISYS
             axAxCanvas1.CanvasHeight = Convert.ToInt32(wfh_canvas1.ActualHeight);
             axAxCanvas1.Width = Convert.ToInt32(wfh_canvas1.ActualWidth);
             axAxCanvas1.Height = Convert.ToInt32(wfh_canvas1.ActualHeight);
+            g_fZoomX = (float)axAxCanvas1.CanvasWidth / m_AxAxAltairU_UI.ImageWidth;
+            g_fZoomY = (float)axAxCanvas1.CanvasHeight / m_AxAxAltairU_UI.ImageHeight;
+            org_fZoomX = (float)axAxCanvas1.CanvasWidth / m_AxAxAltairU_UI.ImageWidth;
+            org_fZoomY = (float)axAxCanvas1.CanvasHeight / m_AxAxAltairU_UI.ImageHeight;
         }
 
 
@@ -593,6 +598,10 @@ namespace MM_LensCalWithAISYS
                     axAxCanvas1.CanvasHeight = Convert.ToInt32(wfh_canvas1.ActualHeight);
                     axAxCanvas1.Width = Convert.ToInt32(wfh_canvas1.ActualWidth);
                     axAxCanvas1.Height = Convert.ToInt32(wfh_canvas1.ActualHeight);
+                    g_fZoomX = (float)axAxCanvas1.CanvasWidth / m_AxAxAltairU_UI.ImageWidth;
+                    g_fZoomY = (float)axAxCanvas1.CanvasHeight / m_AxAxAltairU_UI.ImageHeight;
+                    org_fZoomX = (float)axAxCanvas1.CanvasWidth / m_AxAxAltairU_UI.ImageWidth;
+                    org_fZoomY = (float)axAxCanvas1.CanvasHeight / m_AxAxAltairU_UI.ImageHeight;
                     break;
                 case "wfh_canvas2":
                     wfh2_border.Width = wfh2_border.ActualHeight;
@@ -1028,7 +1037,7 @@ namespace MM_LensCalWithAISYS
             //    1);
             ThreadPool.QueueUserWorkItem(o =>
             {
-                mmMoveTo(endX, endY, 0);
+                mmMoveTo(endX, endY, dZ);  //should be moveto1
             });
             
         }
@@ -1094,28 +1103,41 @@ namespace MM_LensCalWithAISYS
                     moveX = baseX + CorX;
                     moveY = baseY + CorY;
                     //axMotion.MoveTo(moveX, moveY, 0, 0, 1);
-                    System.Windows.MessageBox.Show("BaseX:" + baseX
-                        + " BaseY:" + baseY
-                        + Environment.NewLine
-                        + " CorX:" + CorX
-                        + " CorY:" + CorY
-                        + Environment.NewLine
-                        + " moveX:" + moveX
-                        + " moveY:" + moveY);
-                    tempstr = "Move To X:" + moveY + " Y:" + moveX + "..";
+                    //System.Windows.MessageBox.Show("BaseX:" + baseX
+                    //    + " BaseY:" + baseY
+                    //    + Environment.NewLine
+                    //    + " CorX:" + CorX
+                    //    + " CorY:" + CorY
+                    //    + Environment.NewLine
+                    //    + " moveX:" + moveX
+                    //    + " moveY:" + moveY);
+                    tempstr = "Move To X:" + moveY.ToString("F3") + " Y:" + moveX.ToString("F3") + "..";
                     UpdateSysMsgStatus();
-                    mmMoveTo(moveY, moveX, 0);
+                    mmMoveTo(moveY, moveX, dZ);
                     Thread.Sleep(DT);
-                    StartMatch();
-                   while(mm_x > resX && mm_y > resY)
-                    {
-                        //axMotion.MoveTo(mm_x, mm_y, 0, 0, 1);
-                        tempstr = "Move To X:" + moveY + " Y:" + moveX + "..";
-                        UpdateSysMsgStatus();
-                        mmMoveTo1(mm_x, mm_y, 0);
-                        Thread.Sleep(DT);
+                    
                         StartMatch();
-                    }
+                    Thread.Sleep(100);
+                    //System.Windows.MessageBox.Show(
+                    //    "mm_x:" + mm_x.ToString() +
+                    //    " abs_mm_x:" + Math.Abs(mm_x).ToString() +
+                    //    " mm_y:" + mm_y.ToString() +
+                    //    " abs_mm_y:" + Math.Abs(mm_y).ToString());    
+
+                    //while (Math.Abs(mm_x) > (resX*2) || Math.Abs(mm_y) > (resY*2) )
+                        while (Math.Abs(mm_x) > (resX*miniPixel) || Math.Abs(mm_y) > (resY*miniPixel))
+                        {
+                            //axMotion.MoveTo(mm_x, mm_y, 0, 0, 1);
+                            //tempstr = "Move To X:" + moveY + " Y:" + moveX + "..";
+                            //UpdateSysMsgStatus();
+                            mmMoveTo1(mm_x, mm_y, 0);
+                            Thread.Sleep(DT);
+                        StartMatch();
+                        Thread.Sleep(100);
+                        //CalMatch();
+                        }
+                    tempstr = "Pass X Offset:" + mm_x.ToString("F5") + " Y Offset:" + mm_x.ToString("F5") + ".";
+                    UpdateSysMsgStatus();
                     if (_FollowEncoderInCal)
                     {
                         //axMotion.GetCurPosition(ref eX, ref eY, ref eZ, ref dR, 1);
@@ -1152,8 +1174,8 @@ namespace MM_LensCalWithAISYS
                             UpdateSysMsgStatus();
                         }
                     }
-                    tempstr = "Done.";
-                    UpdateSysMsgStatus();
+                    //tempstr = "Done.";
+                    //UpdateSysMsgStatus();
                     return;
                 }
             }
@@ -1177,8 +1199,8 @@ namespace MM_LensCalWithAISYS
                 //        return;
                 //    }
                 //}
-                tempstr = "Done.";
-                UpdateSysMsgStatus();
+                //tempstr = "Done.";
+                //UpdateSysMsgStatus();
             }));
         }
         private void mmMoveTo1(double X, double Y, double Z)
@@ -1197,12 +1219,12 @@ namespace MM_LensCalWithAISYS
                         }
                         else
                         {
-                            tempstr = "Encoder not work!";
-                            UpdateSysMsgStatus();
+                            //tempstr = "Encoder not work!";
+                            //UpdateSysMsgStatus();
                         }
                     }
-                    tempstr = "done.";
-                    UpdateSysMsgStatus();
+                    //tempstr = "done.";
+                    //UpdateSysMsgStatus();
                     return;
                 }
             }
@@ -1328,7 +1350,7 @@ namespace MM_LensCalWithAISYS
             axLensCal.SetGridDiameter(Convert.ToDouble(SetGriddiameter.Text));
             axLensCal.SetGridMarkType(mm_sgmt);
             axLensCal.SetOutputTexts(mm_sot);
-            axLensCal.SetLensCorSpeed(Convert.ToDouble(SetLenscorPower.Text));
+            axLensCal.SetLensCorSpeed(Convert.ToDouble(SetLensCorSpeed.Text));
             axLensCal.SetLensCorPower(Convert.ToDouble(SetLenscorPower.Text));
             axLensCal.SetLensCorFrequency(Convert.ToDouble(SetLensCorFrequerncy.Text));
             axLensCal.SetLensCorPulseWidth(Convert.ToDouble(SetLenscorPulseWidth.Text));
@@ -1484,7 +1506,7 @@ namespace MM_LensCalWithAISYS
         private void AutoCreateChannel()
         {
             m_AxAxAltairU_UI.WatchDogTimerState = AxAltairUDrv.TxAxauWatchDogTimerState.AXAU_WATCH_DOG_TIMER_STATE_ENABLED;
-            m_AxAxAltairU_UI.VGain = 50;
+            //m_AxAxAltairU_UI.VGain = 50;
             m_AxAxAltairU_UI.Language = AxAltairUDrv.TxAxauLanguage.AXAU_LANGUAGE_TRADITIONAL_CHINESE;
             m_AxAxAltairU_UI.DeviceIndex = 0;
             if (m_AxAxAltairU_UI.IsPortCreated)
@@ -1561,34 +1583,53 @@ namespace MM_LensCalWithAISYS
                     axAxMatch1.PositionType = AxOvkPat.TxAxMatchPositionType.AX_MATCH_POSITION_TYPE_CENTER;
                     axAxMatch1.OperationMode = AxOvkPat.TxAxMatchOperationMode.AX_MATCH_OPERATION_MODE_NORMAL;
                     axAxMatch1.Match();
-                    if (axAxMatch1.NumMatchedPos > 0)
+                    if (axAxMatch1.EffectMatch && axAxMatch1.NumMatchedPos == 1)
                     {
+                        int MAX = axAxMatch1.MatchedX;
+                        int MAY = axAxMatch1.MatchedY;
+                        int MAW = axAxMatch1.PatternWidth;
+                        int MAH = axAxMatch1.PatternHeight;
+                        int CircleMsrX = (MAW / 2) + MAX;
+                        int CircleMsrY = (MAH / 2) + MAY;
+                        OuterRadius = (MAW + MAH) / 4;
+                        InnerRadius = OuterRadius / 2;
                         axAxCircleMsr1.SrcImageHandle = g_nActiveSurfaceHandle;
-                        axAxCircleMsr1.SetPlacement((int)axAxMatch1.FineMatchedX, (int)axAxMatch1.FineMatchedY, 20, axAxROIBW82.ROIWidth / 2, 0, 360);
+                        axAxCircleMsr1.Direction = TxAxCircleMsrDirection.AX_CIRCLEMSR_OUTER_TO_INNER;
+                        axAxCircleMsr1.EdgeType = TxAxTransitionType.AX_MEASURE_B2W_OR_W2B_TRANSITION;
+                        axAxCircleMsr1.B2WEdgeIndex = 0;
+                        axAxCircleMsr1.B2WEdgeOrder = TxAxTransitionOrder.AX_MEASURE_NTH_FROM_BEGIN;
+
+                        axAxCircleMsr1.SampleStep = 1;
+
+                        
+                        axAxCircleMsr1.SetPlacement(MAX, MAY, InnerRadius, OuterRadius, 0, 360);
                         //axAxCircleMsr1.DetectPrimitives();
                         axAxCircleMsr1.DetectPrimitives();
                         if (axAxCircleMsr1.CircleIsFitted)
                         {
-                            r_centerX = (float)axAxCircleMsr1.MeasuredCenterX;
-                            r_centerY = (float)axAxCircleMsr1.MeasuredCenterY;
-                            p_rx.Text = "實際座標 X:" + r_centerX.ToString();
-                            p_ry.Text = "實際座標 Y:" + r_centerY.ToString();
-                            r_cx.Text = "相對座標 X:" + (r_centerX - p_centerX).ToString();
-                            r_cy.Text = "相對座標 Y:" + (p_centerY - r_centerY).ToString();
-                            mm_x = (r_centerX - p_centerX) * (float)Convert.ToDouble(X_res.Text);
-                            mm_y = (p_centerY - r_centerY) * (float)Convert.ToDouble(Y_res.Text);
-                            m_cx.Text = "轉換座標 X:" + mm_x.ToString() + " mm";
-                            m_cy.Text = "轉換座標 Y:" + mm_y.ToString() + " mm";
+                            Dispatcher.BeginInvoke(new Action(() =>
+                            {
+                                r_centerX = (float)axAxCircleMsr1.MeasuredCenterX;
+                                r_centerY = (float)axAxCircleMsr1.MeasuredCenterY;
+                                p_rx.Text = "實際座標 X:" + r_centerX.ToString();
+                                p_ry.Text = "實際座標 Y:" + r_centerY.ToString();
+                                r_cx.Text = "相對座標 X:" + (r_centerX - p_centerX).ToString();
+                                r_cy.Text = "相對座標 Y:" + (p_centerY - r_centerY).ToString();
+                                mm_x = (r_centerX - p_centerX) * double.Parse(X_res.Text);
+                                mm_y = (p_centerY - r_centerY) * double.Parse(Y_res.Text);
+                                m_cx.Text = "轉換座標 X:" + mm_x.ToString() + " mm";
+                                m_cy.Text = "轉換座標 Y:" + mm_y.ToString() + " mm";
+                            }));
                             c_Det = true;
                         }
                         else
                         {
-                            System.Windows.MessageBox.Show("Search Fail-2.");
+                            System.Windows.MessageBox.Show("CircleMsr Search Fail.");
                         }
                     }
                     else
                     {
-                        System.Windows.MessageBox.Show("Search Fail-1.");
+                        System.Windows.MessageBox.Show("Search Match Fail.");
                     }
                 }
                 else
@@ -1603,6 +1644,7 @@ namespace MM_LensCalWithAISYS
                     axAxMatch1.Match();
                     if (axAxMatch1.NumMatchedPos > 0)
                     {
+                        axAxCircleMsr1.EdgeType = TxAxTransitionType.AX_MEASURE_B2W_OR_W2B_TRANSITION;
                         axAxCircleMsr1.SetPlacement((int)axAxMatch1.FineMatchedX, (int)axAxMatch1.FineMatchedY, 20, m_AxAxAltairU_UI.ImageWidth / 2, 0, 360);
                         axAxCircleMsr1.DetectPrimitives();
                         if (axAxCircleMsr1.CircleIsFitted)
@@ -1616,6 +1658,32 @@ namespace MM_LensCalWithAISYS
             {
                 System.Windows.MessageBox.Show("No Target.");
                 return;
+            }
+        }
+
+        private void CalMatch()
+        {
+            axAxCircleMsr1.SrcImageHandle = g_nActiveSurfaceHandle;
+            axAxCircleMsr1.EdgeType = TxAxTransitionType.AX_MEASURE_B2W_OR_W2B_TRANSITION;
+            axAxCircleMsr1.SetPlacement((int)p_centerX, (int)p_centerY, axAxMatch1.PatternWidth / 2, axAxMatch1.PatternWidth,0,360);
+            //axAxCircleMsr1.DetectPrimitives();
+            axAxCircleMsr1.DetectPrimitives();
+            if (axAxCircleMsr1.CircleIsFitted)
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    r_centerX = (float)axAxCircleMsr1.MeasuredCenterX;
+                    r_centerY = (float)axAxCircleMsr1.MeasuredCenterY;
+                    p_rx.Text = "實際座標 X:" + r_centerX.ToString();
+                    p_ry.Text = "實際座標 Y:" + r_centerY.ToString();
+                    r_cx.Text = "相對座標 X:" + (r_centerX - p_centerX).ToString();
+                    r_cy.Text = "相對座標 Y:" + (p_centerY - r_centerY).ToString();
+                    mm_x = (r_centerX - p_centerX) * (float)Convert.ToDouble(X_res.Text);
+                    mm_y = (p_centerY - r_centerY) * (float)Convert.ToDouble(Y_res.Text);
+                    m_cx.Text = "轉換座標 X:" + mm_x.ToString() + " mm";
+                    m_cy.Text = "轉換座標 Y:" + mm_y.ToString() + " mm";
+                }));
+                c_Det = true;
             }
         }
 
@@ -1663,10 +1731,25 @@ namespace MM_LensCalWithAISYS
             switch (tb.Name)
             {
                 case "X_res":
-                    resX = float.Parse(X_res.Text);
+                    resX = double.Parse(X_res.Text);
                     break;
                 case "Y_res":
-                    resY = float.Parse(Y_res.Text);
+                    resY = double.Parse(Y_res.Text);
+                    break;
+                case "minipixel":
+                    if (double.Parse(minipixel.Text) > 0)
+                    {
+                        miniPixel = double.Parse(minipixel.Text);
+                    }
+                    else if (double.Parse(minipixel.Text) ==0)
+                    {
+                        miniPixel = 0.5;
+                    }
+                    else
+                    {
+                        System.Windows.MessageBox.Show("Can't Small then 0.");
+                        minipixel.Text = "0";
+                    }
                     break;
             }
 
@@ -1721,6 +1804,19 @@ namespace MM_LensCalWithAISYS
                 g_fZoomY2 = (float)axAxCanvas2.CanvasHeight / axAxMatch1.PatternHeight;
                 axAxMatch1.DrawLearnedPattern(axAxCanvas2.hDC, g_fZoomX2, g_fZoomY2, 0, 0);
                 axAxCanvas2.RefreshCanvas();
+
+                //axAxCircleMsr1.SrcImageHandle = axAxROIBW81.VegaHandle;
+                //axAxCircleMsr1.Direction = TxAxCircleMsrDirection.AX_CIRCLEMSR_OUTER_TO_INNER;
+                //axAxCircleMsr1.EdgeType = TxAxTransitionType.AX_MEASURE_B2W_OR_W2B_TRANSITION;
+                //axAxCircleMsr1.B2WEdgeIndex = 0;
+                //axAxCircleMsr1.B2WEdgeOrder = TxAxTransitionOrder.AX_MEASURE_NTH_FROM_BEGIN;
+                //axAxCircleMsr1.SetPlacement((int)(axAxROIBW81.Width / 2), (int)(axAxROIBW81.Height / 2), (int)(axAxROIBW81.Width / 2), (int)(axAxROIBW81.Width), 0, 350);
+                //axAxCircleMsr1.DetectPrimitives();
+                //if(axAxCircleMsr1.CircleIsFitted)
+                //{
+                //    InnerRadius = (int)axAxCircleMsr1.MeasuredRadius / 2;
+                //    OuterRadius = (int)axAxCircleMsr1.MeasuredRadius;
+                //}
                 g_Tech = false;
                 Tech_btn.Content = "Get Target";
             }
@@ -1764,6 +1860,7 @@ namespace MM_LensCalWithAISYS
             }
             if (c_Det)
             {
+                //axAxMatch1.DrawMatchedPattern(axAxCanvas1.hDC, 1, g_fZoomX, g_fZoomY, 0, 0);
                 //axAxCircleMsr1.DrawFrame(axAxCanvas1.hDC, g_fZoomX, g_fZoomY, 0, 0);
                 axAxCircleMsr1.DrawFittedPrimitives(axAxCanvas1.hDC, g_fZoomX, g_fZoomY, 0, 0);
                 axAxCircleMsr1.DrawFittedCenter(axAxCanvas1.hDC, g_fZoomX, g_fZoomY, 0, 0, 255);
